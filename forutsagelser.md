@@ -22,6 +22,19 @@ Regler:
 | 4     | inuti promise            | inuti promise      | ja    |                           |
 |       | efter                    | efter              |       |                           |
 |       | then: klart              | then: klart        |       |                           |
+| 5     | sync                     | sync               | ja    |                           |
+|       | promise                  | promise            |       |                           |
+|       | timeout                  | timeout            |       |                           |
+| 6     | först?                   | först?             | 67ja  |                           |
+|       | 6                        | 6                  |       |                           |
+|       | 7                        | 7                  |       |                           |
+| 7     | fel: slut på mjölk       | fel: slut på mjölk | ja    |                           |
+|       | städar                   | städar             |       |                           |
+|       |                          |                    |       |                           |
+| 8     | beställer                | beställer          | ja    |                           |
+|       | sätter mig               | sätter mig         |       |                           |
+|       | bullen klar              | bullen klar        |       |                           |
+|       | kaffet klart             | kaffet klart       |       |                           |
 
 ## Tre meningar med egna ord
 
