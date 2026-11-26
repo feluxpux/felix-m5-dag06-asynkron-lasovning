@@ -11,28 +11,30 @@ Förklaring:
 
 ## Snutt 5
 
-| Steg | Vad händer | Stacken | Microtask-kön | Task-kön | Utskrift hittills |
-|---|---|---|---|---|---|
-| 1 | setTimeout anropas | | | | |
-| 2 | Promise.resolve().then(...) anropas | | | | |
-| 3 | console.log("sync") | | | | |
-| 4 | Stacken tom: vad körs först? | | | | |
-| 5 | Nästa | | | | |
+| Steg | Vad händer                          | Stacken                                  | Microtask-kön    | Task-kön         | Utskrift hittills      |
+| ---- | ----------------------------------- | ---------------------------------------- | ---------------- | ---------------- | ---------------------- |
+| 1    | setTimeout anropas                  | setTimeout                               | tom              | timeout-callback | inget                  |
+| 2    | Promise.resolve().then(...) anropas | Promise.resolve().then                   | promise-callback | timeout-callback | inget                  |
+| 3    | console.log("sync")                 | console.log("sync")                      | tom              | timeout-callback | sync                   |
+| 4    | Stacken tom: vad körs först?        | promise-callback, console.log("promise") | tom              | timeout-callback | sync, promise          |
+| 5    | Nästa                               | timeout-callback, console.log("timeout") | tom              | tom              | sync, promise, timeout |
 
 ## Snutt 10
 
-| Steg | Vad händer | Stacken | Microtask-kön | Task-kön | Utskrift hittills |
-|---|---|---|---|---|---|
-| 1 | console.log("1") | | | | |
-| 2 | första setTimeout | | | | |
-| 3 | Promise.resolve().then(3) | | | | |
-| 4 | andra setTimeout | | | | |
-| 5 | console.log("6") | | | | |
-| 6 | stacken tom, microtask-kön först | | | | |
-| 7 | första tasken | | | | |
-| 8 | andra tasken | | | | |
-| 9 | microtask 5 | | | | |
+| Steg | Vad händer                       | Stacken                                              | Microtask-kön | Task-kön               | Utskrift hittills |
+| ---- | -------------------------------- | ---------------------------------------------------- | ------------- | ---------------------- | ----------------- |
+| 1    | console.log("1")                 | console.log("1")                                     | tom           | tom                    | 1                 |
+| 2    | första setTimeout                | setTimeout                                           | tom           | callback 2             | 1                 |
+| 3    | Promise.resolve().then(3)        | Promise.resolve().then                               | callback 3    | callback 2             | 1                 |
+| 4    | andra setTimeout                 | setTimeout                                           | callback 3    | callback 2, callback 4 | 1                 |
+| 5    | console.log("6")                 | console.log("6")                                     | callback 3    | callback 2, callback 4 | 1,6               |
+| 6    | stacken tom, microtask-kön först | callback 3, console.log("3")                         | tom           | callback 2, callback 4 | 1,6,3             |
+| 7    | första tasken                    | callback 2, console.log("2")                         | tom           | callback 4             | 1,6,3,2           |
+| 8    | andra tasken                     | callback 4, console.log("4"), Promise.resolve().then | callback 5    | tom                    | 1,6,3,2,4         |
+| 9    | microtask 5                      | callback 5, console.log("5")                         | tom           | tom                    | 1,6,3,2,4,5       |
 
 ## Min förklaring i en mening
 
 Varför kommer en promise-callback före en timer med 0 ms?
+Promise-callbacks hamnar i microtask-kön, som töms först när stacken är tom.
+Timern hamnar i task-kön, som körs efter microtasks
