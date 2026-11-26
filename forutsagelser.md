@@ -45,6 +45,6 @@ Regler:
 
 ## Tre meningar med egna ord
 
-1. JavaScript väntar inte på `setTimeout`,
-2. En promise har tre tillstånd: ...
-3. `then` körs alltid ...
+1. JavaScript väntar inte på `setTimeout`, schemalägger callbacken, o kör den först när synkrona koden e klar
+2. En promise har tre tillstånd: ... väntar, uppfylld, rejected
+3. `then` körs alltid ... asynkront
